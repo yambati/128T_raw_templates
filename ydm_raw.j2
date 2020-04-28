@@ -1,0 +1,57 @@
+config 
+	authority
+		name               AAP
+		service 		   AAP-Mgmt-YDM
+			name            AAP-Mgmt-YDM
+			enabled         true
+			scope           private
+			security        AAP-Services		
+			transport       tcp
+				protocol  tcp
+				port-range  9090
+					start-port  9090
+				exit
+			exit
+			address         10.130.98.160/29
+			access-policy   voice.AAP.ATT
+				source  voice.AAP.ATT
+			    permission  allow
+			exit
+			service-policy  DIA-LTE-NHP-CDC
+		exit
+		service-policy DIA-LTE-NHP-CDC
+			name                  DIA-LTE-NHP-CDC
+			vector                broadband-pri
+				name      broadband-pri
+				priority  5
+			exit
+			vector                lte-pri
+				name      lte-pri
+				priority  10
+			exit
+			session-resiliency    revertible-failover
+			peer-path-resiliency  true
+			path-quality-filter   true
+			max-loss             1
+			max-latency          300
+			max-jitter           100
+		exit
+		router AAPCDCVAPOD{{ Pod }} 
+			name AAPCDCVAPOD{{ Pod }}
+			service-route AAP-Mgmt-YDM
+				name          AAP-Mgmt-YDM 
+				service-name  AAP-Mgmt-YDM 
+				next-hop      AAPCDCVAPOD{{ Pod }}A asims-mgmt
+					node-name   AAPCDCVAPOD{{ Pod }}A
+					interface   asims-mgmt
+					gateway-ip  10.130.98.1
+				exit
+				next-hop      AAPCDCVAPOD{{ Pod }}B asims-mgmt
+					node-name   AAPCDCVAPOD{{ Pod }}B
+					interface   asims-mgmt
+					gateway-ip  10.130.98.1
+				exit
+			exit
+		exit
+	exit
+exit

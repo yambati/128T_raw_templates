@@ -1,0 +1,34 @@
+config
+    authority
+        name               AAP
+        service            AAP-Mgmt-NTP
+			name            AAP-Mgmt-NTP
+            transport tcp 
+				protocol    tcp
+				port-range 7547 
+					start-port  7547
+				exit
+				port-range 82 
+					start-port  82
+				exit
+				port-range 21 
+					start-port  21
+				exit
+            exit
+            transport udp 
+				protocol    udp
+				port-range 7547 
+					start-port  7547
+                exit
+                port-range 82 
+                    start-port  82
+                exit
+                port-range 21 
+					start-port  21
+                exit
+            exit	
+			address         10.130.98.153/32
+			address         10.1.10.13/32
+        exit
+    exit
+exit

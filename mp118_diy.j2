@@ -1,0 +1,44 @@
+{%- set storeNumberString = StoreNumber|string %}
+{%- set first_two = storeNumberString[:2] %}
+{%- set last_two = storeNumberString[2:] %}
+{%- set first_two_int = first_two | int %}
+{%- set last_two_int = last_two | int %}
+{%- if last_two_int % 2 == 0 %}
+{%-   set last_two_gw_int = last_two_int + 1 %}
+{%- else %}
+{%-   set last_two_gw_int = last_two_int - 1 %}
+{%- endif %}
+{%- set last_two_gw = last_two_gw_int | string %}
+{%- if last_two_gw|length < 2 %}
+{%-   set last_two_gw = "0" + last_two_gw %}
+{%- endif %}
+config 
+	authority 
+		service MP11X
+			name	MP11X
+			applies-to	router-group
+				type	router-group
+				group-name	MP11X-routers
+			exit
+			scope	public
+			transport	tcp
+				protocol  tcp
+			exit
+			address	169.254.128.128/32
+			share-service-routes  false
+		exit
+		router AAP{{ State }}{{ StoreNumber }}P{{ Pod }}
+			name	AAP{{ State }}{{ StoreNumber }}P{{ Pod }}
+			router-group	MP11X-routers
+			service-route	MP11X-SR
+				name          MP11X-SR
+				service-name  MP11X
+				nat-target    10.1{{ first_two }}.1{{ last_two }}.195
+				next-hop	AAP{{ State }}{{ StoreNumber }}P{{ Pod }}A voice
+					node-name	AAP{{ State }}{{ StoreNumber }}P{{ Pod }}A 
+					interface	voice
+				exit
+			exit
+		exit
+	exit
+exit

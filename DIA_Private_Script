@@ -1,0 +1,31 @@
+Regarding the DIA plug-in, use the following to get reports:
+
+ 
+
+ 
+
+t128-salt -t 30 --out-file=/root/dia_pod1a.txt -I 'hostname:*A' cmd.run 'cat /var/log/128technology/aap_monitoring/diaMonitor* | grep "private?"'
+
+ 
+
+For Pods 2, 3, 4, 5, change the pod1a.txt to pod[x]a.txt
+
+ 
+
+-t : this is to specify a timeout value of running the command on the individual assets. This is required to narrow down the info to fewer logs (/var/log/128technology/aap_monitoring/diaMonitor*) on each asset that command is being run on. Here we have given a timeout of 30 seconds. You may choose not to include that in the command if you wish.
+
+ 
+
+--out-file : specifies the file location where the data will be written. You will find the file in the same location.
+
+ 
+
+ -I 'hostname:A' : Here we are targeting the minions based on their hostnames. The 'A' specifies that hostnames with trailing A will be targeted for running the command since DIA will be plugged on node A (default).
+
+ 
+
+cmd.run : allows you to give the command that you want to run on the minion.
+
+ 
+
+You are targeting all node-A's in a single go,  You do not have to to run it X number of times. Also if you see we are grepping for 'private' so only the nodes which have a private IP will return an output.

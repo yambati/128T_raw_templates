@@ -1,0 +1,21 @@
+config
+    authority
+        router  AAP{{ State }}{{ StoreNumber }}P{{ Pod }}
+            name	AAP{{ State }}{{ StoreNumber }}P{{ Pod }}
+            service-route  ATTUCS-Internet-Mgmt-DIA
+                name	ATTUCS-Internet-Mgmt-DIA
+                service-name	ATTUCS-Internet-Mgmt
+                next-hop	AAP{{ State }}{{ StoreNumber }}P{{ Pod }}A DIA
+                    node-name	AAP{{ State }}{{ StoreNumber }}P{{ Pod }}A
+                    interface	DIA
+                    gateway-ip {{ BBSnowflakeIP.ip_address_gateway }}
+                exit
+                next-hop	AAP{{ State }}{{ StoreNumber }}P{{ Pod }}B DIA
+                    node-name	AAP{{ State }}{{ StoreNumber }}P{{ Pod }}B
+                    interface	DIA
+                    gateway-ip	{{ BBSnowflakeIP.ip_address_gateway }}
+                exit
+            exit
+        exit
+    exit
+exit
